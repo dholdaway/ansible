@@ -1,13 +1,13 @@
 # README
 #
 # Getting Started:
-# 1. vagrant plugin install vagrant-hostmanager
-# 2. vagrant up
-# 3. vagrant ssh
-#
-# This should put you at the control host
-#  with access, by name, to other vms
-# See Topology.pdf for network layout.
+ 1. vagrant plugin install vagrant-hostmanager
+ 2. vagrant up
+ 3. vagrant ssh
+
+ This should put you at the control host
+ with access, by name, to other vms
+ See Topology.pdf for network layout.
 
 # notes
 
@@ -16,9 +16,9 @@ Vagrant 1.9.1
 
     ruby -v
 ruby 2.2.2p95 (2015-04-13 revision 50295) [x86_64-darwin14]
-
+#
 https://www.vagrantup.com
-
+#
 https://github.com/devopsgroup-io/vagrant-hostmanager
 
 The best way to get Ansible for Ubuntu is to add the project's PPA (personal package archive) to your system.

@@ -14,6 +14,14 @@ if [ ! -f "/home/vagrant/.ssh/id_rsa" ]; then
 fi
 cp /home/vagrant/.ssh/id_rsa.pub /vagrant/control.pub
 
+sudo apt-get update -y
+sudo apt-get install software-properties-common -y
+sudo apt-add-repository ppa:ansible/ansible -y
+sudo apt-get update -y
+sudo apt-get install ansible -y
+
+ansible -v
+
 cat << 'SSHEOF' > /home/vagrant/.ssh/config
 Host *
   StrictHostKeyChecking no
