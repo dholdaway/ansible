@@ -25,7 +25,7 @@ you need version 2.2.+ of ruby for the vagrant-hostmanager
 ## Getting Started:
  1. clone me
  2. vagrant plugin install vagrant-hostmanager  
- 3. vagrant up  
+ 3. vagrant up
  4. vagrant ssh 
 
  This should put you at the control host
