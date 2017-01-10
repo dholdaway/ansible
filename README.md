@@ -24,9 +24,9 @@ you need version 2.2.+ of ruby for the vagrant-hostmanager
 
 ## Getting Started:
  1. clone me
- 2. vagrant plugin install vagrant-hostmanager  
+ 2. vagrant plugin install vagrant-hostmanager
  3. vagrant up
- 4. vagrant ssh 
+ 4. vagrant ssh
 
  This should put you at the control host
  with access, by name, to other vms
@@ -50,8 +50,10 @@ Change config file:
 
     vim /etc/ansible/ansible.cfg  
 
-inventory = /etc/ansible/hosts  
-sudo_user = root  
+uncomment 
+
+    inventory = /etc/ansible/hosts  
+    sudo_user = root  
 
 Setup hosts file:  
 
