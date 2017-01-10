@@ -1,66 +1,74 @@
 # README
-#
-# Getting Started:
- 1. vagrant plugin install vagrant-hostmanager
- 2. vagrant up
- 3. vagrant ssh
 
- This should put you at the control host
- with access, by name, to other vms
- See Topology.pdf for network layout.
+# Install Vagrant
 
-# notes
+[install vagrant](https://www.vagrantup.com/downloads.html)
 
     vagrant -v
 Vagrant 1.9.1
 
     ruby -v
 ruby 2.2.2p95 (2015-04-13 revision 50295) [x86_64-darwin14]
-#
-https://www.vagrantup.com
-#
-https://github.com/devopsgroup-io/vagrant-hostmanager
 
-## Install Ansible ( work in progress )
+### Getting Started:
+ 1. vagrant plugin install vagrant-hostmanager  
+ 2. vagrant up  
+ 3. vagrant ssh  
+
+ This should put you at the control host
+ with access, by name, to other vms
+ See Topology.pdf for network layout.
+
+### Install Ansible ( work in progress )
 
 Install Ansible and everything needed:
-Ansible# yum install -y epel-release -y
-Ansible# yum update
-Ansible# yum install git python python-devel python-pip openssl ansible -y
+
+    yum install -y epel-release -y
+    yum update
+    yum install git python python-devel python-pip openssl ansible -y
 
 Check if it works:
-Ansible# ansible --version
 
-Change config file:
-Ansible# vim /etc/ansible/ansible.cfg
-inventory = /etc/ansible/hosts
-sudo_user = root
+    ansible --version
 
-Setup hosts file:
-Ansible# mv /etc/ansible/hosts /etc/ansible/hosts.org
-Ansible# vim /etc/ansible/hosts
-[local]
-localhost
+Change config file:  
 
-[<host group>]
-<ip or fqdn of host>
+    vim /etc/ansible/ansible.cfg  
 
-[<host group>]
-<ip or fqdn of host>
-<ip or fqdn of host>
+inventory = /etc/ansible/hosts  
+sudo_user = root  
 
-Setup Ansible user:
-Ansible# adduser ansible
-Ansible# passwd ansible
-Ansible# visudo
-ansible ALL=(ALL) NOPASSWD: ALL
-<repeat on the other ansible hosts>
+Setup hosts file:  
 
-Setup SSH_Keys from Ansible server
-Ansible# su - ansible
-Ansible$ ssh-keygen
-Ansible$ ssh-copy-id localhost
-Ansible$ ssh-copy-id <host name>
+    mv /etc/ansible/hosts /etc/ansible/hosts.org  
+
+    vim /etc/ansible/hosts  
+
+[local]  
+localhost  
+
+[<host group>]  
+<ip or fqdn of host>  
+
+[<host group>]  
+<ip or fqdn of host>  
+<ip or fqdn of host>  
+
+Setup Ansible user:  
+
+    adduser ansible  
+    passwd ansible  
+    visudo  
+
+ansible ALL=(ALL) NOPASSWD: ALL  
+<repeat on the other ansible hosts>  
+
+Setup SSH_Keys from Ansible server  
+
+    su - ansible  
+    ssh-keygen  
+    ssh-copy-id localhost  
+    ssh-copy-id <host name>  
 
 The best way to get Ansible for Ubuntu is to add the project's PPA (personal package archive) to your system.
 
@@ -87,25 +95,26 @@ ansible 2.2.0.0
   config file = /etc/ansible/ansible.cfg  
   configured module search path = Default w/o overrides
 
-# Commands
-
-    ansible app -s -a "service apache2 restart"
+### Commands
 
 (ansible) (group or host) (sudo) (arbitrary) (command)
 
-    ansible all -m ping
+    ansible app -s -a "service apache2 restart"
 
 runs ping against all hosts
 
-    ansible [GROUP] -m setup --tree "facts
+    ansible all -m ping
 
 Under the "facts" directory will be a file for each host in GROUP
 
-    ansible app -s -m apt -a "name=telnet state=latest"
+    ansible [GROUP] -m setup --tree "facts
 
 installs the latest telnet package
 
-# Command Sheet
+    ansible app -s -m apt -a "name=telnet state=latest"
+
+
+### Command Sheet ( merge me with commands above)
 
 Ansible options:
 -s = sudo
@@ -119,26 +128,47 @@ User Modules:
 - user
 
 Run ping on all hosts:
+
     Ansible$ ansible all -m ping
+
 Run ls -al on all hosts:
+
     Ansible$ ansible all -a "ls -al"
+
 Run command as root:
+
     Ansible$ ansible all -s -a "cat /var/log/messages"
+
 Copy file from local to host:
+
     Ansible$ ansible <host group1> -m copy -a "src=<filenaam> dest=</folder/file>"
+
 Install latest version of a package:
+
     Ansible$ ansible <host group> -s -m yum/apt -a "name=elinks state=latest"
+
 Remove a package:
+
     Ansible$ ansible <host group> -s -m yum/apt -a "name=elinks state=absent"
-Add user:
+
+Add user:  
+
     Ansible$ ansible <host group> -s -m user -a "name=test"
-Remove user without home dir:
+
+Remove user without home dir:  
+
     Ansible$ ansible <host group> -s -m user -a "name=test state=absent"
 
-# Other notes
+### Other notes
 
 Return code with ansible command  
 When you run a ansible command you have a return code like
 
     rc=0 it's if true
     rc=1 it's if false
+
+### Links
+
+https://www.vagrantup.com
+https://www.vagrantup.com/downloads.html
+https://github.com/devopsgroup-io/vagrant-hostmanager
