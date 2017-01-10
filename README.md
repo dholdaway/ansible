@@ -3,6 +3,7 @@
 
 ##Table of Contents
 --------
+[ToC]
 
 ####Install Vagrant
 --------
