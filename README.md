@@ -107,10 +107,11 @@ Next, we need to refresh our system's package index so that it is aware of the p
 
 We now have all of the software required to administer our servers through Ansible
 
+check that version 2.2+ is installed
+
     ansible --version
+
 ansible 2.2.0.0
-  config file = /etc/ansible/ansible.cfg  
-  configured module search path = Default w/o overrides
 
 ## Commands
 
