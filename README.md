@@ -13,6 +13,7 @@
 ####Links
 --------
 
+### Install Vagrant
 [install vagrant](https://www.vagrantup.com/downloads.html)
 
     vagrant -v
@@ -80,15 +81,17 @@ Setup hosts file:
 
     vim /etc/ansible/hosts  
 
+```
 [local]  
 localhost  
 
-`[<host group>]  
+[<host group>]  
 <ip or fqdn of host>  
 
 [<host group>]  
 <ip or fqdn of host>  
 <ip or fqdn of host>`  
+```
 
 Setup Ansible user:  
 
