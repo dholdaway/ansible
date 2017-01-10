@@ -100,8 +100,10 @@ Setup Ansible user:
     passwd ansible  
     visudo  
 
-ansible ALL=(ALL) NOPASSWD: ALL  
-<repeat on the other ansible hosts>  
+```
+ansible ALL=(ALL) NOPASSWD: ALL
+```  
+### <repeat on the other ansible hosts>  
 
 Setup SSH_Keys from Ansible server  
 
