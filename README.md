@@ -1,6 +1,12 @@
 # Ansible refresh
 
-## Install Vagrant
+Table of Contents
+--------
+## Version 0.1
+
+
+Install Vagrant
+--------
 
 [install vagrant](https://www.vagrantup.com/downloads.html)
 
@@ -12,7 +18,8 @@ ruby 2.2.2p95 (2015-04-13 revision 50295) [x86_64-darwin14]
 
 you need version 2.2.+ of ruby for the vagrant-hostmanager
 
-### Install Ruby 2.2.+
+#### Install Ruby 2.2.+
+--------
 
     brew install rbenv ruby-build
 
@@ -22,7 +29,8 @@ you need version 2.2.+ of ruby for the vagrant-hostmanager
 
     echo 'if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi' >> ~/.bash_profile
 
-## Getting Started:
+### Getting Started:
+--------
 1. clone me
 2. vagrant plugin install vagrant-hostmanager
 3. vagrant up
@@ -32,7 +40,8 @@ you need version 2.2.+ of ruby for the vagrant-hostmanager
  with access, by name, to other vms
  See Topology.pdf for network layout.
 
-### Install Ansible ( work in progress and is installed via vagrant up so can be skipped)  
+#### Install Ansible ( work in progress and is installed via vagrant up so can be skipped)
+--------
 
 Install Ansible and everything needed: ( Centos )
 
@@ -44,7 +53,8 @@ Check if it works:
 
     ansible --version
 
-### Ansible Config
+#### Ansible Config
+--------
 
 Change config file:  
 
@@ -113,7 +123,8 @@ check that version 2.2+ is installed
 
 ansible 2.2.0.0
 
-## Commands
+### Commands
+--------
 
 (ansible) (group or host) (sudo) (arbitrary) (command)
 
@@ -131,7 +142,8 @@ installs the latest telnet package
 
     ansible app -s -m apt -a "name=telnet state=latest"
 
-## Command Sheet ( merge me with commands above)
+### Command Sheet ( merge me with commands above)
+--------
 
 Ansible options:
 -s = sudo
@@ -176,7 +188,8 @@ Remove user without home dir:
 
     ansible <host group> -s -m user -a "name=test state=absent"
 
-## Other notes
+### Other notes
+--------
 
 Return code with ansible command  
 When you run a ansible command you have a return code like
@@ -184,8 +197,16 @@ When you run a ansible command you have a return code like
     rc=0 it's if true
     rc=1 it's if false
 
-## Links
+### Links
+--------
 
 https://www.vagrantup.com  
 https://www.vagrantup.com/downloads.html  
 https://github.com/devopsgroup-io/vagrant-hostmanager  
+https://github.com/willthames/ansible-lint  
+https://atom.io/packages/linter-ansible-linting  
+http://erikzaadi.com/2015/11/15/linting-ansible-yaml-in-vim/  
+http://docs.ansible.com/ansible/index.html  
+http://docs.ansible.com/ansible/playbooks.html  
+http://docs.ansible.com/ansible/playbooks_best_practices.html <-- READ ME  
+https://github.com/ansible/ansible-examples  
