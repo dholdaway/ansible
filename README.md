@@ -1,11 +1,12 @@
-# Ansible refresh
-##### Version 0.1
+# Ansible refresh ##### Version 0.1
+--------
 
 ##Table of Contents
---------
-[ToC]
+
 
 ####Install Vagrant
+####Install Ruby
+####Getting Started
 --------
 
 [install vagrant](https://www.vagrantup.com/downloads.html)
@@ -19,7 +20,7 @@ ruby 2.2.2p95 (2015-04-13 revision 50295) [x86_64-darwin14]
 you need version 2.2.+ of ruby for the vagrant-hostmanager
 
 
-#### Install Ruby 2.2.+
+#### [install ruby] Install Ruby 2.2.+
 --------
 
     brew install rbenv ruby-build
@@ -31,7 +32,7 @@ you need version 2.2.+ of ruby for the vagrant-hostmanager
     echo 'if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi' >> ~/.bash_profile
 
 
-#### Getting Started:
+#### [getting started] Getting Started:
 --------
 1. clone me
 2. vagrant plugin install vagrant-hostmanager
