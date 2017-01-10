@@ -14,6 +14,7 @@
 --------
 
 ### Install Vagrant
+--------
 [install vagrant](https://www.vagrantup.com/downloads.html)
 
     vagrant -v
@@ -24,7 +25,7 @@ ruby 2.2.2p95 (2015-04-13 revision 50295) [x86_64-darwin14]
 
 you need version 2.2.+ of ruby for the vagrant-hostmanager
 
-
+--------
 ### Install Ruby 2.2.+
 --------
 
@@ -36,7 +37,7 @@ you need version 2.2.+ of ruby for the vagrant-hostmanager
 
     echo 'if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi' >> ~/.bash_profile
 
-
+--------
 ### Getting Started:
 --------
 1. clone me
@@ -48,7 +49,7 @@ you need version 2.2.+ of ruby for the vagrant-hostmanager
  with access, by name, to other vms
  See Topology.pdf for network layout.
 
-
+--------
 ### Install Ansible ( work in progress and is installed via vagrant up so can be skipped)
 --------
 
@@ -62,7 +63,7 @@ Check if it works:
 
     ansible --version
 
-
+--------
 ### Ansible Config
 --------
 
@@ -136,7 +137,7 @@ check that version 2.2+ is installed
 ansible 2.2.0.0
 
 
-
+--------
 ### Commands
 --------
 
@@ -156,7 +157,7 @@ installs the latest telnet package
 
     ansible app -s -m apt -a "name=telnet state=latest"
 
-
+--------
 ### Command Sheet ( merge me with commands above)
 --------
 
@@ -204,7 +205,7 @@ Remove user without home dir:
     ansible <host group> -s -m user -a "name=test state=absent"
 
 
-
+--------
 ### Other notes
 --------
 
@@ -214,6 +215,7 @@ When you run a ansible command you have a return code like
     rc=0 it's if true
     rc=1 it's if false
 
+--------
 ### Links
 --------
 
