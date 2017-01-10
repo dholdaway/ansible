@@ -23,10 +23,10 @@ you need version 2.2.+ of ruby for the vagrant-hostmanager
     echo 'if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi' >> ~/.bash_profile
 
 ## Getting Started:
- 1. clone me
- 2. vagrant plugin install vagrant-hostmanager
- 3. vagrant up
- 4. vagrant ssh
+1. clone me
+2. vagrant plugin install vagrant-hostmanager
+3. vagrant up
+4. vagrant ssh
 
  This should put you at the control host
  with access, by name, to other vms
@@ -34,7 +34,7 @@ you need version 2.2.+ of ruby for the vagrant-hostmanager
 
 ### Install Ansible ( work in progress and is installed via vagrant up so can be skipped)  
 
-Install Ansible and everything needed:
+Install Ansible and everything needed: ( Centos )
 
     yum install -y epel-release -y
     yum update
@@ -50,7 +50,7 @@ Change config file:
 
     vim /etc/ansible/ansible.cfg  
 
-uncomment 
+uncomment
 
     inventory = /etc/ansible/hosts  
     sudo_user = root  
