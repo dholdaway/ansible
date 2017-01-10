@@ -186,6 +186,6 @@ When you run a ansible command you have a return code like
 
 ## Links
 
-https://www.vagrantup.com
-https://www.vagrantup.com/downloads.html
-https://github.com/devopsgroup-io/vagrant-hostmanager
+https://www.vagrantup.com  
+https://www.vagrantup.com/downloads.html  
+https://github.com/devopsgroup-io/vagrant-hostmanager  
