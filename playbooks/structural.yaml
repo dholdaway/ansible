@@ -1,0 +1,21 @@
+--- # this is a structural YAML example to install APACHE2 on ubuntu
+- hosts: app
+  remote_user: vagrant
+  become: yes
+  become_method: sudo
+  connection: ssh
+  gather_facts: yes
+  vars:
+    username: myuser
+  tasks:
+  - name: install APACHE server on Ubuntu
+    apt:
+      name: apache2
+      state: latest
+    notify:
+    - startservice
+  handlers:
+  - name: startservice
+    service:
+       name: apache2
+       state: restarted

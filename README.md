@@ -21,24 +21,124 @@ https://www.vagrantup.com
 #
 https://github.com/devopsgroup-io/vagrant-hostmanager
 
+## Install Ansible ( work in progress )
+
+Install Ansible and everything needed:
+Ansible# yum install -y epel-release -y
+Ansible# yum update
+Ansible# yum install git python python-devel python-pip openssl ansible -y
+
+Check if it works:
+Ansible# ansible --version
+
+Change config file:
+Ansible# vim /etc/ansible/ansible.cfg
+inventory = /etc/ansible/hosts
+sudo_user = root
+
+Setup hosts file:
+Ansible# mv /etc/ansible/hosts /etc/ansible/hosts.org
+Ansible# vim /etc/ansible/hosts
+[local]
+localhost
+
+[<host group>]
+<ip or fqdn of host>
+
+[<host group>]
+<ip or fqdn of host>
+<ip or fqdn of host>
+
+Setup Ansible user:
+Ansible# adduser ansible
+Ansible# passwd ansible
+Ansible# visudo
+ansible ALL=(ALL) NOPASSWD: ALL
+<repeat on the other ansible hosts>
+
+Setup SSH_Keys from Ansible server
+Ansible# su - ansible
+Ansible$ ssh-keygen
+Ansible$ ssh-copy-id localhost
+Ansible$ ssh-copy-id <host name>
+
 The best way to get Ansible for Ubuntu is to add the project's PPA (personal package archive) to your system.
 
 To do this effectively, we need to install the software-properties-common package, which will give us the ability to work with PPAs easily. (This package was called python-software-properties on older versions of Ubuntu.)
 
     sudo apt-get update
     sudo apt-get install software-properties-common
+
 Once the package is installed, we can add the Ansible PPA by typing the following command:
 
-sudo apt-add-repository ppa:ansible/ansible
+    sudo apt-add-repository ppa:ansible/ansible
+
 Press ENTER to accept the PPA addition.
 
 Next, we need to refresh our system's package index so that it is aware of the packages available in the PPA. Afterwards, we can install the software:
 
     sudo apt-get update
     sudo apt-get install ansible
+
 We now have all of the software required to administer our servers through Ansible
 
     ansible --version
 ansible 2.2.0.0
   config file = /etc/ansible/ansible.cfg  
   configured module search path = Default w/o overrides
+
+# Commands
+
+    ansible app -s -a "service apache2 restart"
+
+(ansible) (group or host) (sudo) (arbitrary) (command)
+
+    ansible all -m ping
+
+runs ping against all hosts
+
+    ansible [GROUP] -m setup --tree "facts
+
+Under the "facts" directory will be a file for each host in GROUP
+
+    ansible app -s -m apt -a "name=telnet state=latest"
+
+installs the latest telnet package
+
+# Command Sheet
+
+Ansible options:
+-s = sudo
+-m = module
+-a "<command>"= action/command
+
+User Modules:
+- ping
+- copy
+- apt and/or yum
+- user
+
+Run ping on all hosts:
+    Ansible$ ansible all -m ping
+Run ls -al on all hosts:
+    Ansible$ ansible all -a "ls -al"
+Run command as root:
+    Ansible$ ansible all -s -a "cat /var/log/messages"
+Copy file from local to host:
+    Ansible$ ansible <host group1> -m copy -a "src=<filenaam> dest=</folder/file>"
+Install latest version of a package:
+    Ansible$ ansible <host group> -s -m yum/apt -a "name=elinks state=latest"
+Remove a package:
+    Ansible$ ansible <host group> -s -m yum/apt -a "name=elinks state=absent"
+Add user:
+    Ansible$ ansible <host group> -s -m user -a "name=test"
+Remove user without home dir:
+    Ansible$ ansible <host group> -s -m user -a "name=test state=absent"
+
+# Other notes
+
+Return code with ansible command  
+When you run a ansible command you have a return code like
+
+    rc=0 it's if true
+    rc=1 it's if false
