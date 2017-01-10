@@ -1,6 +1,6 @@
-# README
+# Ansible refresh
 
-# Install Vagrant
+## Install Vagrant
 
 [install vagrant](https://www.vagrantup.com/downloads.html)
 
@@ -10,16 +10,29 @@ Vagrant 1.9.1
     ruby -v
 ruby 2.2.2p95 (2015-04-13 revision 50295) [x86_64-darwin14]
 
-### Getting Started:
- 1. vagrant plugin install vagrant-hostmanager  
- 2. vagrant up  
- 3. vagrant ssh  
+you need version 2.2.+ of ruby for the vagrant-hostmanager
+
+### Install Ruby 2.2.+
+
+    brew install rbenv ruby-build
+
+    rbenv install 2.2.2
+
+    rbenv global 2.2.2
+
+    echo 'if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi' >> ~/.bash_profile
+
+## Getting Started:
+ 1. clone me
+ 2. vagrant plugin install vagrant-hostmanager  
+ 3. vagrant up  
+ 4. vagrant ssh  
 
  This should put you at the control host
  with access, by name, to other vms
  See Topology.pdf for network layout.
 
-### Install Ansible ( work in progress )
+### Install Ansible ( work in progress and is installed via vagrant up so can be skipped)  
 
 Install Ansible and everything needed:
 
@@ -30,6 +43,8 @@ Install Ansible and everything needed:
 Check if it works:
 
     ansible --version
+
+### Ansible Config
 
 Change config file:  
 
@@ -95,7 +110,7 @@ ansible 2.2.0.0
   config file = /etc/ansible/ansible.cfg  
   configured module search path = Default w/o overrides
 
-### Commands
+## Commands
 
 (ansible) (group or host) (sudo) (arbitrary) (command)
 
@@ -113,8 +128,7 @@ installs the latest telnet package
 
     ansible app -s -m apt -a "name=telnet state=latest"
 
-
-### Command Sheet ( merge me with commands above)
+## Command Sheet ( merge me with commands above)
 
 Ansible options:
 -s = sudo
@@ -129,37 +143,37 @@ User Modules:
 
 Run ping on all hosts:
 
-    Ansible$ ansible all -m ping
+    ansible all -m ping
 
 Run ls -al on all hosts:
 
-    Ansible$ ansible all -a "ls -al"
+    ansible all -a "ls -al"
 
 Run command as root:
 
-    Ansible$ ansible all -s -a "cat /var/log/messages"
+    ansible all -s -a "cat /var/log/messages"
 
 Copy file from local to host:
 
-    Ansible$ ansible <host group1> -m copy -a "src=<filenaam> dest=</folder/file>"
+    ansible <host group1> -m copy -a "src=<filenaam> dest=</folder/file>"
 
 Install latest version of a package:
 
-    Ansible$ ansible <host group> -s -m yum/apt -a "name=elinks state=latest"
+    ansible <host group> -s -m yum/apt -a "name=elinks state=latest"
 
 Remove a package:
 
-    Ansible$ ansible <host group> -s -m yum/apt -a "name=elinks state=absent"
+    ansible <host group> -s -m yum/apt -a "name=elinks state=absent"
 
 Add user:  
 
-    Ansible$ ansible <host group> -s -m user -a "name=test"
+    ansible <host group> -s -m user -a "name=test"
 
 Remove user without home dir:  
 
-    Ansible$ ansible <host group> -s -m user -a "name=test state=absent"
+    ansible <host group> -s -m user -a "name=test state=absent"
 
-### Other notes
+## Other notes
 
 Return code with ansible command  
 When you run a ansible command you have a return code like
@@ -167,7 +181,7 @@ When you run a ansible command you have a return code like
     rc=0 it's if true
     rc=1 it's if false
 
-### Links
+## Links
 
 https://www.vagrantup.com
 https://www.vagrantup.com/downloads.html
