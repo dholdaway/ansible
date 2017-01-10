@@ -1,12 +1,16 @@
-# Ansible refresh ##### Version 0.1
+# Ansible refresh
+##### Version 0.1
 --------
-
 ##Table of Contents
-
-
 ####Install Vagrant
 ####Install Ruby
 ####Getting Started
+####Install Ansible
+####Ansible Config
+####Ansible Commands
+####Ansible Command Sheet ( merge me with commands above)
+####Other Notes
+####Links
 --------
 
 [install vagrant](https://www.vagrantup.com/downloads.html)
@@ -20,7 +24,7 @@ ruby 2.2.2p95 (2015-04-13 revision 50295) [x86_64-darwin14]
 you need version 2.2.+ of ruby for the vagrant-hostmanager
 
 
-#### [install ruby] Install Ruby 2.2.+
+### Install Ruby 2.2.+
 --------
 
     brew install rbenv ruby-build
@@ -32,7 +36,7 @@ you need version 2.2.+ of ruby for the vagrant-hostmanager
     echo 'if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi' >> ~/.bash_profile
 
 
-#### [getting started] Getting Started:
+### Getting Started:
 --------
 1. clone me
 2. vagrant plugin install vagrant-hostmanager
@@ -44,7 +48,7 @@ you need version 2.2.+ of ruby for the vagrant-hostmanager
  See Topology.pdf for network layout.
 
 
-#### Install Ansible ( work in progress and is installed via vagrant up so can be skipped)
+### Install Ansible ( work in progress and is installed via vagrant up so can be skipped)
 --------
 
 Install Ansible and everything needed: ( Centos )
@@ -58,7 +62,7 @@ Check if it works:
     ansible --version
 
 
-#### Ansible Config
+### Ansible Config
 --------
 
 Change config file:  
@@ -130,7 +134,7 @@ ansible 2.2.0.0
 
 
 
-#### Commands
+### Commands
 --------
 
 (ansible) (group or host) (sudo) (arbitrary) (command)
@@ -150,7 +154,7 @@ installs the latest telnet package
     ansible app -s -m apt -a "name=telnet state=latest"
 
 
-#### Command Sheet ( merge me with commands above)
+### Command Sheet ( merge me with commands above)
 --------
 
 Ansible options:
@@ -198,7 +202,7 @@ Remove user without home dir:
 
 
 
-#### Other notes
+### Other notes
 --------
 
 Return code with ansible command  
@@ -207,7 +211,7 @@ When you run a ansible command you have a return code like
     rc=0 it's if true
     rc=1 it's if false
 
-#### Links
+### Links
 --------
 
 https://www.vagrantup.com  
