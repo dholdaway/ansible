@@ -1,11 +1,10 @@
 # Ansible refresh
+##### Version 0.1
 
-Table of Contents
+##Table of Contents
 --------
-## Version 0.1
 
-
-Install Vagrant
+####Install Vagrant
 --------
 
 [install vagrant](https://www.vagrantup.com/downloads.html)
@@ -18,6 +17,7 @@ ruby 2.2.2p95 (2015-04-13 revision 50295) [x86_64-darwin14]
 
 you need version 2.2.+ of ruby for the vagrant-hostmanager
 
+
 #### Install Ruby 2.2.+
 --------
 
@@ -29,7 +29,8 @@ you need version 2.2.+ of ruby for the vagrant-hostmanager
 
     echo 'if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi' >> ~/.bash_profile
 
-### Getting Started:
+
+#### Getting Started:
 --------
 1. clone me
 2. vagrant plugin install vagrant-hostmanager
@@ -39,6 +40,7 @@ you need version 2.2.+ of ruby for the vagrant-hostmanager
  This should put you at the control host
  with access, by name, to other vms
  See Topology.pdf for network layout.
+
 
 #### Install Ansible ( work in progress and is installed via vagrant up so can be skipped)
 --------
@@ -52,6 +54,7 @@ Install Ansible and everything needed: ( Centos )
 Check if it works:
 
     ansible --version
+
 
 #### Ansible Config
 --------
@@ -74,12 +77,12 @@ Setup hosts file:
 [local]  
 localhost  
 
-[<host group>]  
+`[<host group>]  
 <ip or fqdn of host>  
 
 [<host group>]  
 <ip or fqdn of host>  
-<ip or fqdn of host>  
+<ip or fqdn of host>`  
 
 Setup Ansible user:  
 
@@ -123,7 +126,9 @@ check that version 2.2+ is installed
 
 ansible 2.2.0.0
 
-### Commands
+
+
+#### Commands
 --------
 
 (ansible) (group or host) (sudo) (arbitrary) (command)
@@ -142,7 +147,8 @@ installs the latest telnet package
 
     ansible app -s -m apt -a "name=telnet state=latest"
 
-### Command Sheet ( merge me with commands above)
+
+#### Command Sheet ( merge me with commands above)
 --------
 
 Ansible options:
@@ -188,7 +194,9 @@ Remove user without home dir:
 
     ansible <host group> -s -m user -a "name=test state=absent"
 
-### Other notes
+
+
+#### Other notes
 --------
 
 Return code with ansible command  
@@ -197,7 +205,7 @@ When you run a ansible command you have a return code like
     rc=0 it's if true
     rc=1 it's if false
 
-### Links
+#### Links
 --------
 
 https://www.vagrantup.com  
