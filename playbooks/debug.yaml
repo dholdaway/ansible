@@ -1,0 +1,18 @@
+##
+# playbook demo of debug and register statement
+#
+--- # this is a structural YAML example to install TELNET on ubuntu
+- hosts: app
+  remote_user: vagrant
+  become: yes
+  become_method: sudo
+  connection: ssh
+  gather_facts: no
+
+  tasks:
+  - name: install telnet server on Ubuntu
+    apt:
+      name: telnet
+      state: absent
+    register: result
+  - debug: var=result
