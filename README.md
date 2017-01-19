@@ -230,4 +230,13 @@ http://erikzaadi.com/2015/11/15/linting-ansible-yaml-in-vim/
 http://docs.ansible.com/ansible/index.html  
 http://docs.ansible.com/ansible/playbooks.html  
 http://docs.ansible.com/ansible/playbooks_best_practices.html <-- READ ME  
-https://github.com/ansible/ansible-examples  
+https://github.com/ansible/ansible-examples
+https://docs.ansible.com/ansible/intro_patterns.html
+
+-------
+### Trouble Shooting Links
+-------
+
+http://sgargan.blogspot.co.uk/2013/10/troubleshooting-ssh-connections-in.html
+http://stackoverflow.com/questions/37425078/ansible-failed-to-connect-to-the-host-via-ssh-error
+http://stackoverflow.com/questions/37213551/ansible-ssh-connection-fail
