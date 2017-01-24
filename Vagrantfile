@@ -36,6 +36,7 @@ EOF
   end
 
   config.vm.define "lb01" do |h|
+    h.vm.hostname = "lb01"
     h.vm.network "private_network", ip: "192.168.135.101"
     config.vm.network "forwarded_port", guest: 80, host: 8080, auto_correct: true
     h.vm.provision :shell, inline: 'cat /vagrant/control.pub >> /home/vagrant/.ssh/authorized_keys'
@@ -43,6 +44,7 @@ EOF
   end
 
   config.vm.define "app01" do |h|
+    h.vm.hostname = "app01"
     h.vm.network "private_network", ip: "192.168.135.111"
     config.vm.network "forwarded_port", guest: 80, host: 8081,auto_correct: true
     h.vm.provision :shell, inline: 'cat /vagrant/control.pub >> /home/vagrant/.ssh/authorized_keys'
@@ -50,6 +52,7 @@ EOF
   end
 
   config.vm.define "app02" do |h|
+    h.vm.hostname = "app02"
     h.vm.network "private_network", ip: "192.168.135.112"
     config.vm.network "forwarded_port", guest: 80, host: 8082,auto_correct: true
     h.vm.provision :shell, inline: 'cat /vagrant/control.pub >> /home/vagrant/.ssh/authorized_keys'
@@ -57,6 +60,7 @@ EOF
   end
 
   config.vm.define "db01" do |h|
+    h.vm.hostname = "db01"
     h.vm.network "private_network", ip: "192.168.135.121"
     h.vm.provision :shell, inline: 'cat /vagrant/control.pub >> /home/vagrant/.ssh/authorized_keys'
     h.vm.provision :shell, inline: 'cp ~vagrant/.ssh/authorized_keys /root/.ssh'

@@ -49,6 +49,7 @@ you need version 2.2.+ of ruby for the vagrant-hostmanager
  with access, by name, to other vms
  See Topology.pdf for network layout.
 
+
 --------
 ### Install Ansible ( work in progress and is installed via vagrant up so can be skipped)
 --------
@@ -198,6 +199,50 @@ Remove a package:
 
     ansible <host group> -s -m yum/apt -a "name=elinks state=absent"
 
+
+    ansible webserver -s -m apt -a "name=nginx state=absent"
+
+```
+app02 | SUCCESS => {
+    "changed": true,
+    "stderr": "",
+    "stdout": "Reading package lists...\nBuilding dependency tree...\nReading state information...\nThe following packages were automatically installed and are no longer required:\n  libxslt1.1 nginx-common nginx-core\nUse 'apt-get autoremove' to remove them.\nThe following packages will be REMOVED:\n  nginx\n0 upgraded, 0 newly installed, 1 to remove and 156 not upgraded.\nAfter this operation, 96.3 kB disk space will be freed.\n(Reading database ... 65250 files and directories currently installed.)\nRemoving nginx (1.4.6-1ubuntu3.7) ...\n",
+    "stdout_lines": [
+        "Reading package lists...",
+        "Building dependency tree...",
+        "Reading state information...",
+        "The following packages were automatically installed and are no longer required:",
+        "  libxslt1.1 nginx-common nginx-core",
+        "Use 'apt-get autoremove' to remove them.",
+        "The following packages will be REMOVED:",
+        "  nginx",
+        "0 upgraded, 0 newly installed, 1 to remove and 156 not upgraded.",
+        "After this operation, 96.3 kB disk space will be freed.",
+        "(Reading database ... 65250 files and directories currently installed.)",
+        "Removing nginx (1.4.6-1ubuntu3.7) ..."
+    ]
+}
+app01 | SUCCESS => {
+    "changed": true,
+    "stderr": "",
+    "stdout": "Reading package lists...\nBuilding dependency tree...\nReading state information...\nThe following packages were automatically installed and are no longer required:\n  libxslt1.1 nginx-common nginx-core\nUse 'apt-get autoremove' to remove them.\nThe following packages will be REMOVED:\n  nginx\n0 upgraded, 0 newly installed, 1 to remove and 156 not upgraded.\nAfter this operation, 96.3 kB disk space will be freed.\n(Reading database ... 65250 files and directories currently installed.)\nRemoving nginx (1.4.6-1ubuntu3.7) ...\n",
+    "stdout_lines": [
+        "Reading package lists...",
+        "Building dependency tree...",
+        "Reading state information...",
+        "The following packages were automatically installed and are no longer required:",
+        "  libxslt1.1 nginx-common nginx-core",
+        "Use 'apt-get autoremove' to remove them.",
+        "The following packages will be REMOVED:",
+        "  nginx",
+        "0 upgraded, 0 newly installed, 1 to remove and 156 not upgraded.",
+        "After this operation, 96.3 kB disk space will be freed.",
+        "(Reading database ... 65250 files and directories currently installed.)",
+        "Removing nginx (1.4.6-1ubuntu3.7) ..."
+    ]
+}
+```
+
 Add user:  
 
     ansible <host group> -s -m user -a "name=test"
@@ -205,6 +250,81 @@ Add user:
 Remove user without home dir:  
 
     ansible <host group> -s -m user -a "name=test state=absent"
+
+Deploying From Source Control Deploy your webapp straight from git:
+
+    ansible webservers -m git -a "repo=git://foo.example.org/repo.git dest=/srv/myapp version=HEAD"
+
+Since Ansible modules can notify change handlers it is possible to tell Ansible to run specific tasks when the code is updated, such as deploying Perl/Python/PHP/Ruby directly from git and then restarting apache.
+
+Managing Services
+    Ensure a service is started on all webservers:
+
+    ansible webservers -m service -a "name=httpd state=started"
+
+Alternatively, restart a service on all webservers:
+
+    ansible webservers -m service -a "name=httpd state=restarted"
+
+Ensure a service is stopped:
+
+    ansible webservers -m service -a "name=httpd state=stopped"
+
+
+--------
+### Playbooks
+--------
+
+run playbook
+
+    ansible-playbook <locationofplaybook.yaml>
+
+Example playbook  
+installs curl on control host using sudo
+
+```
+---
+- hosts: control
+become: true
+tasks:
+- name: install tools
+  apt: name={{item}} state=present update_cache=yes
+  with_items:
+    - curl
+```
+
+Example playbook with items
+installs a number of web items
+
+```
+---
+- hosts: webserver
+  become: true
+  tasks:
+    - name: install web components
+      apt: name={{item}} state=present update_cache=yes
+      with_items:
+        - apache2
+        - libapache2-mod-wsgi
+        - python-pip
+        - python-virtualenv
+        - python-mysqldb
+```
+
+Example playbook with wait for
+
+```
+---
+- hosts: loadbalancer
+  become: true
+  tasks:
+    - name: verify nginx service
+      command: service nginx status
+
+    - name: verify nginx is listening on 80
+      wait_for: port=80 timeout=1
+```
+
 
 
 --------
@@ -216,6 +336,13 @@ When you run a ansible command you have a return code like
 
     rc=0 it's if true
     rc=1 it's if false
+
+
+Which syntax would loop through and render the elements of the list variable "backends" in a Jinja2 template?
+
+    {% for server in backends %} {{ server }} {% endfor %}
+
+For loop is in '{%', ends with 'endfor' and the variable is rendered with '{{'
 
 --------
 ### Links
@@ -232,11 +359,12 @@ http://docs.ansible.com/ansible/playbooks.html
 http://docs.ansible.com/ansible/playbooks_best_practices.html <-- READ ME  
 https://github.com/ansible/ansible-examples
 https://docs.ansible.com/ansible/intro_patterns.html
+http://docs.ansible.com/ansible/intro_adhoc.html#managing-packages
 
 -------
 ### Trouble Shooting Links
 -------
-
+https://docs.ansible.com/ansible/uri_module.html
 http://sgargan.blogspot.co.uk/2013/10/troubleshooting-ssh-connections-in.html
 http://stackoverflow.com/questions/37425078/ansible-failed-to-connect-to-the-host-via-ssh-error
 http://stackoverflow.com/questions/37213551/ansible-ssh-connection-fail
