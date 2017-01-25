@@ -325,7 +325,128 @@ Example playbook with wait for
       wait_for: port=80 timeout=1
 ```
 
+Gathering Facts with Filter inside a Playbook
 
+But you can disable the default behavior and call setup yourself with the filter parameter.
+
+```
+- hosts: all
+  sudo: yes
+  gather_facts: False
+  tasks:
+   - setup:
+       filter: ansible_*
+```
+
+Since you're working on a role and might not want to have this setup call in your role, you could make use of pre_tasks.
+
+```
+- hosts: all
+  sudo: yes
+  gather_facts: False
+  pre_tasks:
+   - setup:
+       filter: ansible_*
+  roles:
+   - your_role_here
+```
+
+playbook using Selective Removal: shell, register, with_items, when
+```
+---
+- name: install tools
+  apt: name={{item}} state=present update_cache=yes
+  with_items:
+    - python-httplib2
+
+- name: install nginx
+  apt: name=nginx state=present update_cache=yes
+
+- name: configure nginx sites
+  template: src=nginx.conf.j2 dest=/etc/nginx/sites-available/{{ item.key }} mode=0644
+  with_dict: "{{ sites }}"
+  notify: restart nginx
+
+- name: get active sites
+  shell: ls -1 /etc/nginx/sites-enabled
+  register: active
+
+- name: de-activate sites
+  file: path=/etc/nginx/sites-enabled/{{ item }} state=absent
+  with_items: active.stdout_lines
+  when: item not in sites
+  notify: restart nginx
+
+- name: activate nginx sites
+  file: src=/etc/nginx/sites-available/{{ item.key }} dest=/etc/nginx/sites-enabled/{{ item.key }} state=link
+  with_dict: " {{ sites }}"
+  notify: restart nginx
+
+- name: ensure nginx started
+  service: name=nginx state=started enabled=yes
+```
+--------
+### Roles
+--------
+
+--------
+### Vault
+--------
+    ansible-vault create <name>
+
+type a password
+
+create a yml file
+
+```
+---
+vault_db_pass: <any string>
+```
+
+    ansible-vault edit vault
+
+enter password to open file  
+
+ERROR! Decryption failed on /vagrant/group_vars/all/vault
+
+    ansible-playbook XXX.yml --ask-vault-pass
+
+or
+
+    echo "password" > ~/.vault_pass.txt
+    chmod 0600 !$
+
+and stash it in the ansible.cfg
+
+```
+[defaults]
+inventory = ./dev
+vault_password_file = ~/.vault_pass.txt
+```
+------
+### Variable Precedence: Where Should I Put A Variable?
+------
+```
+In 2.x, we have made the order of precedence more specific (with the last listed variables winning prioritization):
+
+role defaults [1]
+inventory vars [2]
+inventory group_vars
+inventory host_vars
+playbook group_vars
+playbook host_vars
+host facts
+play vars
+play vars_prompt
+play vars_files
+registered vars
+set_facts
+role and include vars
+block vars (only for tasks in block)
+task vars (only for the task)
+extra vars (always win precedence)
+Basically, anything that goes into “role defaults” (the defaults folder inside the role) is the most malleable and easily overridden. Anything in the vars directory of the role overrides previous versions of that variable in namespace. The idea here to follow is that the more explicit you get in scope, the more precedence it takes with command line -e extra vars always winning. Host and/or inventory variables can win over role defaults, but not explicit includes like the vars directory or an include_vars task.
+```
 
 --------
 ### Other notes
@@ -344,6 +465,29 @@ Which syntax would loop through and render the elements of the list variable "ba
 
 For loop is in '{%', ends with 'endfor' and the variable is rendered with '{{'
 
+one error on ansible 2.2.0.0 register.stdout_lines format. Incorrect syntax:
+
+    with_items: active.stdout_lines
+
+Correct syntax:
+
+    with_items: "{‌{active.stdout_lines}}"
+
+How could you define a variable value and be absolutely sure that it would not be overridden anywhere else by Ansible?
+
+    Pass the variable using the `-e` or `--extra-vars`parameter when running `ansible-playbook`.
+
+What ad-hoc command would you run to determine the facts available for a server?
+
+    ansible -m setup
+
+The "setup" module will query all facts on a host and return them.
+
+--------
+### Playbooks Database (its probably already been written)
+--------
+https://galaxy.ansible.com/
+
 --------
 ### Links
 --------
@@ -360,7 +504,12 @@ http://docs.ansible.com/ansible/playbooks_best_practices.html <-- READ ME
 https://github.com/ansible/ansible-examples
 https://docs.ansible.com/ansible/intro_patterns.html
 http://docs.ansible.com/ansible/intro_adhoc.html#managing-packages
-
+https://docs.ansible.com/ansible/playbooks_variables.html
+https://liquidat.wordpress.com/2016/01/26/howto-introduction-to-ansible-variables/
+http://stackoverflow.com/questions/22522985/how-can-i-write-variables-inside-the-tasks-file-in-ansible
+http://stackoverflow.com/questions/30662069/how-can-i-pass-variable-to-ansible-playbook-in-the-command-line
+http://docs.ansible.com/ansible/playbooks_loops.html#looping-over-hashes
+https://docs.ansible.com/ansible/playbooks_vault.html
 -------
 ### Trouble Shooting Links
 -------
