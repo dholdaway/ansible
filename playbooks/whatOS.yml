@@ -1,0 +1,7 @@
+---
+# playbook to return OS in hosts
+- name: Return OS of hosts
+  hosts: all
+  gather_facts: true
+  tasks:
+  - debug: var=ansible_distribution

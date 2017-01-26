@@ -10,6 +10,7 @@
 
 - hosts: webserver
   become: true
+  gather_facts: False
   tasks:
     - name: verify apache2 service
       command: service apache2 status
@@ -27,10 +28,11 @@
       wait_for: host={{ ansible_eth0.ipv4.address }} port=3306 timeout=1
 
 - hosts: control
+  gather_facts: True
   tasks:
     - name: verify end-to-end index response
       uri: url=http://{{item}} return_content=yes
-      with_items: groups.loadbalancer
+      with_items: "{{ groups.loadbalancer }}"
       register: lb_index
 
     - fail: msg="index failed to return content"
@@ -39,7 +41,7 @@
 
     - name: verify end-to-end db response
       uri: url=http://{{item}}/db return_content=yes
-      with_items: groups.loadbalancer
+      with_items: "{{ groups.loadbalancer }}"
       register: lb_db
 
     - fail: msg="db failed to return content"
@@ -50,7 +52,7 @@
   tasks:
     - name: verify backend index response
       uri: url=http://{{item}} return_content=yes
-      with_items: groups.webserver
+      with_items: "{{groups.webserver}}"
       register: app_index
 
     - fail: msg="index failed to return content"
@@ -59,7 +61,7 @@
 
     - name: verify backend db response
       uri: url=http://{{item}}/db return_content=yes
-      with_items: groups.webserver
+      with_items: "{{groups.webserver}}"
       register: app_db
 
     - fail: msg="db failed to return content"

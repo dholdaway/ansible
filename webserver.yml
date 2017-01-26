@@ -4,3 +4,5 @@
   roles:
     - apache2
     - demo_app
+
+- include: playbooks/remove_nginx.yml

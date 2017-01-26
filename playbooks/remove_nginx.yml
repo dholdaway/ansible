@@ -1,0 +1,11 @@
+---
+# playbook to remove nginx
+- hosts: webserver
+  become: true
+  tasks:
+    - name: remove nginx
+      apt: name=nginx state=absent
+      tags: [ 'packages' ]
+
+    - name: stop nginx service
+      service: name=nginx state=stopped

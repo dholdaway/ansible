@@ -270,6 +270,70 @@ Ensure a service is stopped:
 
     ansible webservers -m service -a "name=httpd state=stopped"
 
+using LIMIT on a playbook run to host
+
+    ansible-playbook site.yml --limit app01
+
+Using TAGS
+
+list
+
+    ansible-playbook site.yml --list-tags
+
+```
+    playbook: site.yml
+
+      play #1 (all): all	TAGS: []
+          TASK TAGS: []
+
+      play #2 (control): control	TAGS: []
+          TASK TAGS: [{{ 'packages' }}]
+
+      play #3 (database): database	TAGS: []
+          TASK TAGS: []
+
+      play #4 (webserver): webserver	TAGS: []
+          TASK TAGS: []
+
+      play #5 (loadbalancer): loadbalancer	TAGS: []
+          TASK TAGS: []
+```
+
+skip
+
+    ansible-playbook site.yml --skip-tags "packages"
+
+do
+
+    ansible-playbook site.yml --tags "package"
+
+
+using Limit and tags
+
+    ansible-playbook site.yml --limit lb01 --tags "configure"
+```
+PLAY [all] *********************************************************************
+
+TASK [setup] *******************************************************************
+ok: [lb01]
+
+PLAY [loadbalancer] ************************************************************
+
+TASK [nginx : configure nginx sites] *******************************************
+ok: [lb01] => (item={'key': u'myapp', 'value': {u'frontend': 80, u'backend': 80}})
+
+TASK [nginx : get active sites] ************************************************
+ok: [lb01]
+
+TASK [nginx : de-activate sites] ***********************************************
+skipping: [lb01] => (item=myapp)
+
+TASK [nginx : activate nginx sites] ********************************************
+ok: [lb01] => (item={'key': u'myapp', 'value': {u'frontend': 80, u'backend': 80}})
+
+PLAY RECAP *********************************************************************
+lb01                       : ok=4    changed=0    unreachable=0    failed=0
+```
 
 --------
 ### Playbooks
@@ -423,9 +487,113 @@ and stash it in the ansible.cfg
 inventory = ./dev
 vault_password_file = ~/.vault_pass.txt
 ```
+
 ------
-### Variable Precedence: Where Should I Put A Variable?
+### Troubleshooting Ansible
 ------
+
+ansible to prompt and ask us which steps to run
+
+    ansible-playbook site.yml --step
+
+```
+PLAY [all] *********************************************************************
+Perform task: TASK: setup (N)o/(y)es/(c)ontinue: y
+```
+
+    ansible-playbook site.yml --start-at-task "activate nginx sites"
+
+```
+PLAY [all] *********************************************************************
+
+PLAY [control] *****************************************************************
+
+PLAY [database] ****************************************************************
+
+PLAY [webserver] ***************************************************************
+
+PLAY [loadbalancer] ************************************************************
+
+TASK [nginx : activate nginx sites] ********************************************
+ok: [lb01] => (item={'key': u'myapp', 'value': {u'frontend': 80, u'backend': 80}})
+
+TASK [nginx : ensure nginx started] ********************************************
+ok: [lb01]
+
+PLAY RECAP *********************************************************************
+lb01                       : ok=2    changed=0    unreachable=0    failed=0
+```
+
+if a host fails ansible generates a limit file for you to re-run.
+
+    ansible-playbook site.yml --limit @xxx.retry
+
+check syntax of yml file
+
+    ansible-playbook --syntax-check site.yml
+
+Dry Run
+
+    ansible-playbook --check site.yml
+
+note that not all modules are support, plus it wont gather facts
+
+debugging
+
+ansible has a debug module
+
+this is our task
+```
+- name: get active sites
+  shell: ls -1 /etc/nginx/sites-enabled
+  register: active
+  changed_when: "active.stdout_lines != sites.keys()"
+  tags: [ 'configure' ]
+
+- debug: var=active.stdout_lines
+```
+
+    ansible-playbook site.yml --limit lb01 --start-at-task "get active sites"
+
+```
+PLAY [all] *********************************************************************
+
+PLAY [loadbalancer] ************************************************************
+
+TASK [nginx : get active sites] ************************************************
+ok: [lb01]
+
+TASK [nginx : debug] ***********************************************************
+ok: [lb01] => {
+    "active.stdout_lines": [
+        "myapp"
+    ]
+}
+
+TASK [nginx : de-activate sites] ***********************************************
+skipping: [lb01] => (item=myapp)
+
+TASK [nginx : activate nginx sites] ********************************************
+ok: [lb01] => (item={'key': u'myapp', 'value': {u'frontend': 80, u'backend': 80}})
+
+TASK [nginx : ensure nginx started] ********************************************
+ok: [lb01]
+
+PLAY RECAP *********************************************************************
+lb01                       : ok=4    changed=0    unreachable=0    failed=0
+```
+
+- debug: var=vars
+
+is also useful for printing all the vars within the role.
+
+
+--------
+### Other notes
+--------
+
+Variable Precedence: Where Should I Put A Variable?
+
 ```
 In 2.x, we have made the order of precedence more specific (with the last listed variables winning prioritization):
 
@@ -447,10 +615,6 @@ task vars (only for the task)
 extra vars (always win precedence)
 Basically, anything that goes into “role defaults” (the defaults folder inside the role) is the most malleable and easily overridden. Anything in the vars directory of the role overrides previous versions of that variable in namespace. The idea here to follow is that the more explicit you get in scope, the more precedence it takes with command line -e extra vars always winning. Host and/or inventory variables can win over role defaults, but not explicit includes like the vars directory or an include_vars task.
 ```
-
---------
-### Other notes
---------
 
 Return code with ansible command  
 When you run a ansible command you have a return code like
@@ -483,6 +647,16 @@ What ad-hoc command would you run to determine the facts available for a server?
 
 The "setup" module will query all facts on a host and return them.
 
+to time the how long a playbook takes
+
+    time ansible-playbook <playbook>
+```
+    real	0m9.064s
+    user	0m2.771s
+    sys	0m1.263s
+```
+
+this is useful for optimisation
 --------
 ### Playbooks Database (its probably already been written)
 --------
