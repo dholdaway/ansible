@@ -453,6 +453,26 @@ playbook using Selective Removal: shell, register, with_items, when
 ### Roles
 --------
 
+Roles are a way to reuse functionality by putting all of the logic for a particular use case in the same place. As an example if you have tasks that you might run on all servers regardless of what the server is used for, that logic might be put in a role called “common.”
+
+And if you have logic to configure a web server, then you may have another role named “webserver.” And whenever you need to install a new web application, you can include these two roles in your playbook.
+
+ansible-galaxy <nameofrole> init
+
+Roles have a directory structure like this:
+```
+rolename
+ - files
+ - handlers
+ - meta
+ - templates
+ - tasks
+ - vars
+```
+
+Within each directory, Ansible will search for and read any Yaml file called main.yml automatically.
+
+
 --------
 ### Vault
 --------
@@ -487,6 +507,23 @@ and stash it in the ansible.cfg
 inventory = ./dev
 vault_password_file = ~/.vault_pass.txt
 ```
+
+    ansible-vault -h
+```
+Usage: ansible-vault [create|decrypt|edit|encrypt|rekey] \
+      [--help] [options] file_name
+
+Options:
+  -h, --help  show this help message and exit
+```
+
+For the most part, we'll use ansible-vault create|edit /path/to/file.yml. Here, however, are all of the available commands:
+
+create - Create a new file and encrypt it
+decrypt - Create a plaintext file from an encrypted file
+edit - Edit an already-existing encrypted file
+encrypt - Encrypt an existing plain-text file
+rekey - Set a new password on a encrypted file
 
 ------
 ### Troubleshooting Ansible
@@ -657,6 +694,15 @@ to time the how long a playbook takes
 ```
 
 this is useful for optimisation
+
+Templates
+
+Templates at their core are a way to copy files to a remote server. However the difference between templates and static files is that templates will be processed before they’re copied to the remote host. And this allows you to include variables, conditionals, loops, etc. Ansible uses Jinja2 as its template engine.
+
+Handlers
+
+Handlers are basically tasks that are run when some event happens. As an example if you change a web server’s configuration file, you’ll need to restart the web server service. This is an ideal use case for handlers.
+
 --------
 ### Playbooks Database (its probably already been written)
 --------

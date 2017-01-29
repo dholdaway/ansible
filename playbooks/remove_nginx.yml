@@ -3,9 +3,12 @@
 - hosts: webserver
   become: true
   tasks:
-    - name: remove nginx
-      apt: name=nginx state=absent
-      tags: [ 'packages' ]
+   - name: remove nginx
+     apt: name=nginx state=absent
+     tags: [ 'packages' ]
+     notify:
+      - stop nginx
 
-    - name: stop nginx service
-      service: name=nginx state=stopped
+  handlers:
+   - name: stop nginx
+     service: name=nginx state=stopped
