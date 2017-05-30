@@ -1,18 +1,27 @@
 # Ansible refresh
 ##### Version 0.1 . 
 --------  
-##Table of Contents . 
-####Install Vagrant . 
-####Install Ruby . 
+##Table of Contents .
+ 
+####Install Vagrant .
+ 
+####Install Ruby .
+ 
 ####Getting Started . 
-####Install Ansible . 
-####Ansible Config . 
-####Ansible Commands . 
-####Ansible Command Sheet ( merge me with commands above) . 
-####Other Notes . 
-####Links . 
---------
 
+####Install Ansible . 
+
+####Ansible Config . 
+
+####Ansible Commands . 
+
+####Ansible Command Sheet ( merge me with commands above) .
+ 
+####Other Notes . 
+
+####Links . 
+
+--------
 ### Install Vagrant
 --------
 [install vagrant](https://www.vagrantup.com/downloads.html)
