@@ -342,6 +342,25 @@ lb01                       : ok=4    changed=0    unreachable=0    failed=0
 run playbook
 
     ansible-playbook <locationofplaybook.yaml>
+    
+ Example playbook (Update System)   
+ 
+ ```
+ ---
+- hosts: local
+  tasks: 
+    - name: Upgrade all packages to the latest version
+      apt:  
+        update_cache: yes
+        upgrade: yes
+    - name: Remove useless packages from the cache
+      apt:
+        autoclean: yes
+    - name: Remove dependencies that are no longer required
+      apt:
+        autoremove: yes
+...
+```
 
 Example playbook  
 installs curl on control host using sudo
